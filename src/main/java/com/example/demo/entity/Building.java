@@ -9,22 +9,28 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name = "username")
-@Data
+@Table(name = "Buildings")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
-public class User {
+@Getter
+@Setter
+public class Building {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "buildingID")
+    private int buildingID;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "buildingName", nullable = false)
+    private String buildingName;
 
-    
+    @Builder.Default
+    @Column(name = "isDeleted", nullable = false)
+    private boolean isDeleted = false;
 }
