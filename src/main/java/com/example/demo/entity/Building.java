@@ -1,5 +1,11 @@
 package com.example.demo.entity;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,9 +15,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "Buildings")
@@ -19,18 +23,32 @@ import lombok.Setter;
 @NoArgsConstructor
 @Data
 @Builder
-@Getter
-@Setter
+@SQLDelete(sql = "UPDATE Buildings SET deleted_at = current_timestamp WHERE buildingID = ?")
 public class Building {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "buildingID")
     private int buildingID;
 
-    @Column(name = "buildingName", nullable = false)
+    @Column(name = "buildingName")
     private String buildingName;
 
-    @Builder.Default
-    @Column(name = "isDeleted", nullable = false)
-    private boolean isDeleted = false;
+    @Column(name = "waterPrice")
+    private double waterPrice;
+
+    @Column(name = "elecPrice")
+    private double elecPrice;
+
+
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 }

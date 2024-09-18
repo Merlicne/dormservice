@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Building;
+import java.util.List;
+
+import com.example.demo.model.BuildingModel;
+import com.example.demo.model.JwtToken;
 
 public interface IBuildingService {
-    public Iterable<Building> getBuildingAll();
-    public Building getBuildingById(int id);
-    public Building createBuilding(Building building);
-    public Building updateBuilding(int id, Building building);
-    public void deleteBuilding(int id);
-    // public Iterable<Building> getBuildingByRoomId(int id);
+    public List<BuildingModel> getBuildingAll(JwtToken jwtToken);
+    public BuildingModel getBuildingById(int id, JwtToken jwtToken);
+    public BuildingModel createBuilding(BuildingModel building, JwtToken jwtToken);
+    public BuildingModel updateBuilding(int id, BuildingModel building, JwtToken jwtToken);
+    public void deleteBuilding(int id, JwtToken jwtToken);
 }
