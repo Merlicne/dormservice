@@ -69,7 +69,7 @@ EOF
 
   lifecycle {
     replace_triggered_by = [ 
-      metadata
+      metadata.gce-container-declaration
      ]
   }
 }
