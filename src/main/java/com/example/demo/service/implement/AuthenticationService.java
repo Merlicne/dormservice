@@ -3,12 +3,14 @@ package com.example.demo.service.implement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Admin;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.logs.Logger;
 import com.example.demo.middleware.JwtService;
@@ -64,11 +66,23 @@ public class AuthenticationService implements IAuthenticationService {
 
     public AdminModel register(AdminModel input) {
         Logger.info("Register request for user: " + input.getUsername());
+
+        Admin adminExist = adminRepository.findByUsername(input.getUsername()).orElse(null);
+        if(adminExist != null){
+            throw new BadRequestException("Username already exists");
+        }
+
         PasswordValidator.validate(input.getPassword());
         input.setPassword(passwordEncoder.encode(input.getPassword()));
         Admin admin = AdminConvertor.toEntity(input);
         admin.setRole(Role.ADMIN);
-        admin = adminRepository.save(admin);
+        try{
+            admin = adminRepository.save(admin);
+        } catch (DataIntegrityViolationException e){
+            throw new BadRequestException("Username already exists");
+        } catch (Exception e){
+            throw new RuntimeException("Internal server error");
+        }
         return AdminConvertor.toModel(admin);
     }
 

@@ -11,9 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Role;
-import com.example.demo.exception.ForbiddenException;
-import com.example.demo.exception.UnAuthorizedException;
-import com.example.demo.model.JwtToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -28,26 +25,13 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
-    public boolean allowRoles(JwtToken jwtToken, Role... roles) {
-        if (jwtToken == null) {
-            throw new UnAuthorizedException("You are not authorized to access this resource");
-        }
-        final Claims claims = extractAllClaims(jwtToken.getToken());
-        boolean hasRole = false;
-        for (Role role : roles) {
-            if (role.toString().equals(claims.get("role", String.class))) {
-                hasRole = true;
-                break;
-            }
-        }
-        if (!hasRole) {
-            throw new ForbiddenException("You are not allowed to access this resource");
-        }
-        return true;
-    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public Role extractRole(String token) {
+        return Role.valueOf(extractClaim(token, claims -> claims.get("role", String.class)));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

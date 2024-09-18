@@ -42,14 +42,18 @@ spec:
             value: ${var.DATABASE_USERNAME}
         - name: SPRING_DATASOURCE_PASSWORD
             value: ${var.DATABASE_PASSWORD}
+        - name: SPRING_JPA_HIBERNATE_DDL-AUTO
+            value: "update"
+        - name: SPRING_JPA_SHOW-SQL
+            value: "true"
+        - name: EUREKA_CLIENT_ENABLED
+            value: "true"
         - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
             value: "http://${var.EUREKA_URL}"
         - name: SECURITY_JWT_SECRET-KEY
             value: ${var.JWT_SECRET}
-        - name: EUREKA_CLIENT_ENABLED
-            value: "true"
-        - name: SPRING_JPA_HIBERNATE_DDL-AUTO
-            value: "update"
+        - name: SECURITY_JWT_EXPIRATION-TIME
+            value: ${var.JWT_EXPIRATION_TIME}
       ports:
         - containerPort: 8080
           hostPort: 80

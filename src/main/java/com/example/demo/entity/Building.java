@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-@SQLDelete(sql = "UPDATE Buildings SET isDeleted = current_timestamp WHERE buildingID = ?")
+@SQLDelete(sql = "UPDATE Buildings SET deleted_at = current_timestamp WHERE buildingID = ?")
 public class Building {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

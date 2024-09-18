@@ -22,6 +22,10 @@ variable "JWT_SECRET" {
   description = "The secret"
 }
 
+variable "JWT_EXPIRATION_TIME" {
+  description = "The expiration time of the JWT token"
+}
+
 variable "project_id" {}
 variable "region" {}
 variable "zone" {}

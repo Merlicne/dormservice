@@ -1,0 +1,9 @@
+spring_datasource_url
+spring_datasource_username
+spring_datasource_password
+spring_jpa_hibernate_ddl_auto {default=create}
+spring_jpa_show_sql {default=true}
+eureka_client_enabled 
+eureka_client_serviceUrl_defaultZone 
+security_jwt_secret-key
+security_jwt_expiration-time

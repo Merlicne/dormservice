@@ -21,9 +21,24 @@ public class BuildingValidator {
         }
     }
 
+    public static void validateWaterPrice(BuildingModel building) {
+        if (building.getWaterPrice() <= 0) {
+            throw new BadRequestException("Water price is required");
+        }
+    }
+
+    public static void validateElecPrice(BuildingModel building) {
+        if (building.getElecPrice() <= 0) {
+            throw new BadRequestException("Electricity price is required");
+        }
+    }
+
+    
+
     public static void validate(BuildingModel building) {
         validateName(building);
-        validateId(building);
+        validateWaterPrice(building);
+        validateElecPrice(building);
     }
     
 }
