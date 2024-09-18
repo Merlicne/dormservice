@@ -37,19 +37,23 @@ spec:
       image: ${var.IMAGE_NAME}
       env:
         - name: SPRING_DATASOURCE_URL
-            value: "jdbc:postgresql://${var.DATABASE_URL}/${var.DATABASE_NAME}"
+          value: "jdbc:postgresql://${var.DATABASE_URL}/${var.DATABASE_NAME}"
         - name: SPRING_DATASOURCE_USERNAME
-            value: ${var.DATABASE_USERNAME}
+          value: ${var.DATABASE_USERNAME}
         - name: SPRING_DATASOURCE_PASSWORD
-            value: ${var.DATABASE_PASSWORD}
+          value: ${var.DATABASE_PASSWORD}
         - name: EUREKA_CLIENT_ENABLED
-            value: "true"
+          value: "true"
         - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-            value: "http://${var.EUREKA_URL}"
+          value: "http://${var.EUREKA_URL}"
         - name: SECURITY_JWT_SECRET_KEY
-            value: ${var.JWT_SECRET}
+          value: ${var.JWT_SECRET}
         - name: SECURITY_JWT_EXPIRATION_TIME
-            value: ${var.JWT_EXPIRATION_TIME}
+          value: ${var.JWT_EXPIRATION_TIME}
+        - name: SPRING_JPA_HIBERNATE_DDL-AUTO
+          value: "update"
+        - name: SPRING_JPA_SHOW_SQL
+          value: "false"
       ports:
         - containerPort: 8080
           hostPort: 80
