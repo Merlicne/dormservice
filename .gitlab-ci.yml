@@ -80,7 +80,7 @@ deploy:
       -backend-config="unlock_method=DELETE"
       -backend-config="retry_wait_min=5"
     - IMAGE_NAME="${GCP_REGION}-docker.pkg.dev/$GCP_PROJECT_ID/services/$SERVICE_NAME:$CI_COMMIT_SHORT_SHA"
-    - terraform destroy
+    - terraform destroy -auto-approve
       -var "region=$GCP_REGION"   
       -var "zone=$GCP_ZONE" 
       -var "service_name=$SERVICE_NAME" 
