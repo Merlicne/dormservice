@@ -91,9 +91,10 @@ deploy:
       -var "DATABASE_URL=$DB_URL"
       -var "DATABASE_USERNAME=$DORM_DB_USERNAME"
       -var "DATABASE_PASSWORD=$DORM_DB_PASSWORD"
-      -var "DATABASE_NAME=$DORM_DB_DATABASE"
+      -var "DATABASE_NAME=$DB_DATABASE"
       -var "EUREKA_URL=$EUREKA_ENDPOINT"
       -var "JWT_SECRET=$JWT_KEY"
+      -var "JWT_EXPIRATION_TIME=$JWT_EXPIRATION_TIME"
     - terraform apply -auto-approve 
       -var "region=$GCP_REGION" 
       -var "zone=$GCP_ZONE" 
@@ -105,9 +106,10 @@ deploy:
       -var "DATABASE_URL=$DB_URL"
       -var "DATABASE_USERNAME=$DORM_DB_USERNAME"
       -var "DATABASE_PASSWORD=$DORM_DB_PASSWORD"
-      -var "DATABASE_NAME=$DORM_DB_DATABASE"
+      -var "DATABASE_NAME=$DB_DATABASE"
       -var "EUREKA_URL=$EUREKA_ENDPOINT"
       -var "JWT_SECRET=$JWT_KEY"
+      -var "JWT_EXPIRATION_TIME=$JWT_EXPIRATION_TIME"
   only:
     - master
     - main
