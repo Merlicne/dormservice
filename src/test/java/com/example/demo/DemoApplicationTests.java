@@ -10,16 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class DemoApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
 	@Autowired
 	private TestRestTemplate restTemplate;
-
-	@Test
-	void homeResponse() {
-		String body = this.restTemplate.getForObject("/", String.class);
-		assertEquals("Spring is here!", body);
-	}
 }

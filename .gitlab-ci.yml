@@ -1,49 +1,113 @@
 # This file is a template, and might need editing before it works on your project.
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+# jdk 17
+# deploy to google cloud artifact registry
+# then deploy to google compute engine with terraform
 
-# This is a sample GitLab CI/CD configuration file that should run without any modifications.
-# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
-# it uses echo commands to simulate the pipeline execution.
-#
-# A pipeline is composed of independent jobs that run scripts, grouped into stages.
-# Stages run in sequential order, but jobs within stages run in parallel.
-#
-# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
+image: maven:3.9.9-ibm-semeru-17-focal
 
-stages:          # List of stages for jobs, and their order of execution
+services:
+  - docker:24.0.5-dind
+
+variables:  
+  DOCKER_HOST: tcp://docker:2375/  # Connect to the Docker daemon running in the service
+  DOCKER_TLS_CERTDIR: ""
+  SERVICE_NAME: "dorm-service"
+  GCP_REGION: "asia-southeast1"
+  GCP_ZONE: "asia-southeast1-a"
+  TF_ADDRESS: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/${CI_PROJECT_NAME}
+  TF_HTTP_USERNAME: gitlab-ci-token
+  TF_HTTP_PASSWORD: ${CI_JOB_TOKEN}
+
+stages:
   - build
   - test
+  - push_image
   - deploy
 
-include:
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
+cache:
+  paths:
+    - .m2/repository/
+    - target/
 
-build-job:       # This job runs in the build stage, which runs first.
+build:
   stage: build
   script:
-    - echo "Compiling the code..."
-    - echo "Compile complete."
-
-unit-test-job:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+    - mvn clean package
+    
+test:
+  stage: test
   script:
-    - echo "Running unit tests... This will take about 60 seconds."
-    - sleep 60
-    - echo "Code coverage is 90%"
+    - mvn test
 
-lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
+push_image:
+  stage: push_image
+  image: google/cloud-sdk:slim
+  services:
+    - docker:19.03.12-dind
   script:
-    - echo "Linting code... This will take about 10 seconds."
-    - sleep 10
-    - echo "No lint issues found."
+      - IMAGE_NAME="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/services/$SERVICE_NAME:$CI_COMMIT_SHORT_SHA"
+      - echo "$GCP_SERVICE_ACCOUNT_KEY" | docker login -u _json_key --password-stdin "https://${GCP_REGION}-docker.pkg.dev"
+      - docker build -t $IMAGE_NAME .
+      - docker push $IMAGE_NAME
+  only:
+    - master
+    - main
 
-deploy-job:      # This job runs in the deploy stage.
-  environment: production 
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+deploy:
+  stage: deploy
+  image:
+    name: hashicorp/terraform:latest
+    entrypoint: [""]
+
+  before_script:
+    - apk add --no-cache curl python3 py3-crcmod bash libc6-compat
+    - curl https://sdk.cloud.google.com > install.sh
+    - bash install.sh --disable-prompts
+    - export PATH=$PATH:/root/google-cloud-sdk/bin
+    - echo "$GCP_SERVICE_ACCOUNT_KEY" > gcp-key.json
+    - gcloud auth activate-service-account --key-file=gcp-key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - export GOOGLE_APPLICATION_CREDENTIALS="$PWD/gcp-key.json"
   script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+    - terraform init
+      -backend-config="address=${TF_ADDRESS}"
+      -backend-config="lock_address=${TF_ADDRESS}/lock"
+      -backend-config="unlock_address=${TF_ADDRESS}/lock"
+      -backend-config="username=${TF_HTTP_USERNAME}"
+      -backend-config="password=${TF_HTTP_PASSWORD}"
+      -backend-config="lock_method=POST"
+      -backend-config="unlock_method=DELETE"
+      -backend-config="retry_wait_min=5"
+    - IMAGE_NAME="${GCP_REGION}-docker.pkg.dev/$GCP_PROJECT_ID/services/$SERVICE_NAME:$CI_COMMIT_SHORT_SHA"
+    - terraform plan 
+      -var "region=$GCP_REGION"   
+      -var "zone=$GCP_ZONE" 
+      -var "service_name=$SERVICE_NAME" 
+      -var "IMAGE_NAME=$IMAGE_NAME" 
+      -var "project_id=$GCP_PROJECT_ID" 
+      -var "gitlab_registry_username=$CI_REGISTRY_USER"
+      -var "gitlab_registry_token=$CI_REGISTRY_PASSWORD"
+      -var "DATABASE_URL=$DB_URL"
+      -var "DATABASE_USERNAME=$DORM_DB_USERNAME"
+      -var "DATABASE_PASSWORD=$DORM_DB_PASSWORD"
+      -var "DATABASE_NAME=$DORM_DB_DATABASE"
+      -var "EUREKA_URL=$EUREKA_ENDPOINT"
+      -var "JWT_SECRET=$JWT_KEY"
+    - terraform apply -auto-approve 
+      -var "region=$GCP_REGION" 
+      -var "zone=$GCP_ZONE" 
+      -var "service_name=$SERVICE_NAME" 
+      -var "IMAGE_NAME=$IMAGE_NAME" 
+      -var "project_id=$GCP_PROJECT_ID"
+      -var "gitlab_registry_username=$CI_REGISTRY_USER"
+      -var "gitlab_registry_token=$CI_REGISTRY_PASSWORD"
+      -var "DATABASE_URL=$DB_URL"
+      -var "DATABASE_USERNAME=$DORM_DB_USERNAME"
+      -var "DATABASE_PASSWORD=$DORM_DB_PASSWORD"
+      -var "DATABASE_NAME=$DORM_DB_DATABASE"
+      -var "EUREKA_URL=$EUREKA_ENDPOINT"
+      -var "JWT_SECRET=$JWT_KEY"
+  only:
+    - master
+    - main
+

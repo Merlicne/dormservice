@@ -1,15 +1,10 @@
-FROM maven:3-jdk-8-alpine as builder
+FROM maven:3.9.9-ibm-semeru-17-focal
 
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
 WORKDIR /usr/src/app
+RUN mvn clean package -DskipTests
 
-COPY . /usr/src/app
-RUN mvn package
-
-FROM openjdk:8-jre-alpine
-
-COPY --from=builder /usr/src/app/target/*.jar /app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java"]
-CMD ["-jar", "/app.jar"]
+FROM openjdk:17-jdk-slim
+COPY --from=0 /usr/src/app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
