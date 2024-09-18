@@ -68,8 +68,9 @@ EOF
   }
 
   lifecycle {
-    create_before_destroy = true
-    prevent_destroy = true
+    replace_triggered_by = [ 
+      metadata
+     ]
   }
 }
 
