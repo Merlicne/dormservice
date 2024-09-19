@@ -42,11 +42,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
 
-        try{
-
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new UnAuthorizedException("Missing or invalid Authorization header");
+        
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
         }
+        try{
 
         final String jwt = authHeader.substring(7);
         final String userEmail = jwtService.extractUsername(jwt);
