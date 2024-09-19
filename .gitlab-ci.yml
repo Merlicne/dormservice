@@ -95,6 +95,7 @@ deploy:
       -var "EUREKA_URL=$EUREKA_ENDPOINT"
       -var "JWT_SECRET=$JWT_KEY"
       -var "JWT_EXPIRATION_TIME=$JWT_EXPIRATION_TIME"
+      -var "VERSION=$CI_COMMIT_SHORT_SHA"
     - terraform apply -auto-approve 
       -var "region=$GCP_REGION" 
       -var "zone=$GCP_ZONE" 
@@ -110,6 +111,7 @@ deploy:
       -var "EUREKA_URL=$EUREKA_ENDPOINT"
       -var "JWT_SECRET=$JWT_KEY"
       -var "JWT_EXPIRATION_TIME=$JWT_EXPIRATION_TIME"
+      -var "VERSION=$CI_COMMIT_SHORT_SHA"
   only:
     - master
     - main

@@ -16,6 +16,10 @@ resource "google_compute_instance" "default" {
 
   tags = ["softdev", "http-server", "https-server"]
 
+  labels = {
+    version = "${var.VERSION}"
+  }
+
   boot_disk {
     initialize_params {
       image = "cos-cloud/cos-stable"
