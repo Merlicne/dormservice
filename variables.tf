@@ -34,9 +34,6 @@ variable "project_id" {}
 variable "region" {}
 variable "zone" {}
 variable "IMAGE_NAME" {}
-variable "gitlab_registry_username" {}
-variable "gitlab_registry_token" {}
-
 variable "service_name" {
   description = "The name of the Cloud Run service"
   default = "dorm-service"

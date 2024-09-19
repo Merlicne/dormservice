@@ -112,6 +112,7 @@ deploy:
       -var "JWT_SECRET=$JWT_KEY"
       -var "JWT_EXPIRATION_TIME=$JWT_EXPIRATION_TIME"
       -var "VERSION=$CI_COMMIT_SHORT_SHA"
+    - gcloud compute instances reset $SERVICE_NAME --zone=$GCP_ZONE
   only:
     - master
     - main

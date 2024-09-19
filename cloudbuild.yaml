@@ -1,0 +1,52 @@
+steps:
+  - name: 'maven:3.9.9-ibm-semeru-17-focal'
+    entrypoint: 'mvn'
+    args: ['clean', 'install', '-Djacoco.skip=true']
+    id: 'build'
+  
+  - name: 'maven:3.9.9-ibm-semeru-17-focal'
+    entrypoint: 'mvn'
+    args: ['test','-Djacoco.skip=true']
+    id: 'test'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-southeast1-docker.pkg.dev/${PROJECT_ID}/services/${_SERVICE_NAME}:${COMMIT_SHA}', '.']
+    id: 'docker-build'
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-southeast1-docker.pkg.dev/${PROJECT_ID}/services/${_SERVICE_NAME}:${COMMIT_SHA}']
+    id: 'docker-push'
+  
+  - id: 'terraform-init'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        terraform init -backend-config="address=${_TF_ADDRESS}" -backend-config="lock_address=${_TF_ADDRESS}/lock" -backend-config="unlock_address=${_TF_ADDRESS}/lock" -backend-config="username=${_TF_HTTP_USERNAME}" -backend-config="password=${_TF_HTTP_PASSWORD}" -backend-config="lock_method=POST" -backend-config="unlock_method=DELETE" -backend-config="retry_wait_min=5"
+
+  - id: 'terraform-plan-apply'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        terraform plan -var "region=asia-southeast1" -var "zone=asia-southeast1-a" -var "service_name=$REPO_NAME" -var "IMAGE_NAME=asia-southeast1-docker.pkg.dev/${PROJECT_ID}/services/${_SERVICE_NAME}:${COMMIT_SHA}" -var "project_id=$PROJECT_ID" -var "EUREKA_URL=${_EUREKA_ENDPOINT}" -var "JWT_SECRET=${_JWT_KEY}" -var "JWT_EXPIRATION_TIME=${_JWT_EXPIRATION_TIME}" -var "VERSION=$COMMIT_SHA" -var "DATABASE_URL=${_DB_URL}" -var "DATABASE_USERNAME=${_DB_USERNAME}" -var "DATABASE_PASSWORD=${_DB_PASSWORD}" -var "DATABASE_NAME=${_DB_DATABASE}"
+  
+  - id: 'terraform-apply'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        terraform apply -auto-approve -var "region=asia-southeast1" -var "zone=asia-southeast1-a" -var "service_name=$REPO_NAME" -var "IMAGE_NAME=asia-southeast1-docker.pkg.dev/${PROJECT_ID}/services/${_SERVICE_NAME}:${COMMIT_SHA}" -var "project_id=$PROJECT_ID" -var "EUREKA_URL=${_EUREKA_ENDPOINT}" -var "JWT_SECRET=${_JWT_KEY}" -var "JWT_EXPIRATION_TIME=${_JWT_EXPIRATION_TIME}" -var "VERSION=$COMMIT_SHA" -var "DATABASE_URL=${_DB_URL}" -var "DATABASE_USERNAME=${_DB_USERNAME}" -var "DATABASE_PASSWORD=${_DB_PASSWORD}" -var "DATABASE_NAME=${_DB_DATABASE}"
+  
+  - id: 'gcloud-restart-gce'
+    name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'gcloud'
+    args: ['compute', 'instances', 'reset', '${_SERVICE_NAME}', '--zone=asia-southeast1-a']
+
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
