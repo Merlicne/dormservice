@@ -70,8 +70,8 @@ class BuildingServiceTest {
                 .buildingName("Test Building")
                 .waterPrice(10)
                 .elecPrice(10)
-                .createdAt(date)
-                .updatedAt(date)
+                .createdAt(LocalDateTime.parse(date, formatter))
+                .updatedAt(LocalDateTime.parse(date, formatter))
                 .deletedAt(null)
                 .build();
     }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonAlias;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -27,13 +28,13 @@ public class DormModel {
     private String address;
 
     @JsonAlias("createdAt")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @JsonAlias("updatedAt")
-    private String updatedAt;
+    private LocalDateTime updatedAt;
     
     @JsonAlias("deletedAt")
-    private String deletedAt;
+    private LocalDateTime deletedAt;
 
 
 }

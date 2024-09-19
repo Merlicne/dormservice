@@ -30,7 +30,7 @@ import com.example.demo.repository.DormRepository;
 import com.example.demo.service.implement.DormService;
 
 @ExtendWith(MockitoExtension.class)
-public class DormServiceTest {
+class DormServiceTest {
 
     @Mock
     private DormRepository dormRepository;
@@ -72,8 +72,8 @@ public class DormServiceTest {
                     .name("Test Dorm")
                     .telephone("0123456789")
                     .address("Test Address")
-                    .createdAt(date)
-                    .updatedAt(date)
+                    .createdAt(LocalDateTime.parse(date, formatter))
+                    .updatedAt(LocalDateTime.parse(date, formatter))
                     .deletedAt(null)
                     .build();
     }

@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonAlias;
 
 import lombok.AllArgsConstructor;
@@ -24,9 +26,9 @@ public class AdminModel {
     @JsonAlias("phone")
     private String phone;
     @JsonAlias("created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
     @JsonAlias("updated_at")
-    private String updatedAt;
+    private LocalDateTime updatedAt;
     @JsonAlias("deleted_at")
-    private String deletedAt;
+    private LocalDateTime deletedAt;
 }

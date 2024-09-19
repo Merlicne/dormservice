@@ -1,8 +1,5 @@
 package com.example.demo.util.convertor;
 
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,19 +13,6 @@ public class AdminConvertor {
     }
 
     public static Admin toEntity(AdminModel model) {
-        LocalDateTime createdAt = null;
-        LocalDateTime updatedAt = null;
-        LocalDateTime deletedAt = null;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        if (model.getCreatedAt() != null) {
-            createdAt = LocalDateTime.parse(model.getCreatedAt(), formatter);
-        }
-        if (model.getUpdatedAt() != null) {
-            updatedAt = LocalDateTime.parse(model.getUpdatedAt(), formatter);
-        }
-        if (model.getDeletedAt() != null) {
-            deletedAt = LocalDateTime.parse(model.getDeletedAt(), formatter);
-        }
 
 
         return com.example.demo.entity.Admin.builder()
@@ -37,35 +21,22 @@ public class AdminConvertor {
                 .name(model.getName())
                 .email(model.getEmail())
                 .phone(model.getPhone())
-                .createdAt(createdAt)
-                .updatedAt(updatedAt)
-                .deletedAt(deletedAt)
+                .createdAt(model.getCreatedAt())
+                .updatedAt(model.getUpdatedAt())
+                .deletedAt(model.getDeletedAt())
                 .build();
     }
 
     public static AdminModel toModel(Admin entity) {
-        String createdAt = null;
-        String updatedAt = null;
-        String deletedAt = null;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        if (entity.getCreatedAt() != null) {
-            createdAt = entity.getCreatedAt().format(formatter);
-        }
-        if (entity.getUpdatedAt() != null) {
-            updatedAt = entity.getUpdatedAt().format(formatter);
-        }
-        if (entity.getDeletedAt() != null) {
-            deletedAt = entity.getDeletedAt().format(formatter);
-        }
         return com.example.demo.model.AdminModel.builder()
                 .username(entity.getUsername())
                 .password(entity.getPassword())
                 .name(entity.getName())
                 .email(entity.getEmail())
                 .phone(entity.getPhone())
-                .createdAt(createdAt)
-                .updatedAt(updatedAt)
-                .deletedAt(deletedAt)
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .deletedAt(entity.getDeletedAt())
                 .build();
     }
 
