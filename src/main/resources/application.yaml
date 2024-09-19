@@ -38,8 +38,12 @@ server:
     port: 8080
 
 security:
+    allow:
+        issuer: softdev_proj
     jwt:
         secret:
             key: 45euytfkfrtyrtykfge65tdyfhkfthjgdrtdghhf
         expiration:
-            time: 1000
+            time: 10000
+        issuer: softdev_proj
+    

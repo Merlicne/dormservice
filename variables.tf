@@ -34,6 +34,8 @@ variable "project_id" {}
 variable "region" {}
 variable "zone" {}
 variable "IMAGE_NAME" {}
+variable "JWT_ISSUER" {}
+
 variable "service_name" {
   description = "The name of the Cloud Run service"
   default = "dorm-service"

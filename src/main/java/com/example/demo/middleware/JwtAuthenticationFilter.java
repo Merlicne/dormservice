@@ -1,7 +1,9 @@
 package com.example.demo.middleware;
 
 import java.io.IOException;
+import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import org.springframework.security.core.Authentication;
-
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,7 +24,10 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import com.example.demo.entity.Role;
 import com.example.demo.exception.UnAuthorizedException;
+
+import io.jsonwebtoken.Claims;
 
 
 @Component
@@ -32,7 +37,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    
+    @Value("${security.allow.issuer}")
+    private String issuer;
 
     @Override
     protected void doFilterInternal(
@@ -40,42 +47,44 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         @NonNull HttpServletResponse response,
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
+               final String authHeader = request.getHeader("Authorization");
 
-        
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
+        
         try{
+            final String token = authHeader.substring(7);
 
-        final String jwt = authHeader.substring(7);
-        final String userEmail = jwtService.extractUsername(jwt);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null) {
+                final String username = jwtService.extractUsername(token);
+                final Role role = jwtService.extractRole(token);
 
-        if (userEmail != null && authentication == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                if (jwtService.isTokenExpired(token)) {
+                    throw new UnAuthorizedException("Token expired");
+                }
+                if (username == null || role == null) {
+                    throw new UnAuthorizedException("Invalid token");
+                }
+                
+                Claims claims = jwtService.extractAllClaims(token);
+                String tokenIssuer = claims.getIssuer();
 
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
+                if (!issuer.equals(tokenIssuer)) {
+                    throw new UnAuthorizedException("Invalid token issuer");
+                }
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }else{
-                throw new UnAuthorizedException("Invalid token");
+                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(tokenIssuer);
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null,Collections.singleton(authority));
+                SecurityContextHolder.getContext().setAuthentication(auth);
+
+                filterChain.doFilter(request, response);
+
             }
-        }else{
-            throw new UnAuthorizedException("Invalid token");
-        }
-
-
-        filterChain.doFilter(request, response);
-        }catch(Exception e){
+        }catch (Exception e){
             handlerExceptionResolver.resolveException(request, response, null, e);
         }
     }

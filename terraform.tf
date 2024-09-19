@@ -58,6 +58,8 @@ spec:
           value: "update"
         - name: SPRING_JPA_SHOW_SQL
           value: "false"
+        - name: SECURITY_JWT_ISSUER
+          value: ${var.JWT_ISSUER}
       ports:
         - containerPort: 8080
           hostPort: 80
