@@ -31,7 +31,7 @@ steps:
     args:
       - '-c'
       - |
-        terraform plan -var "region=asia-southeast1" -var "zone=asia-southeast1-a" -var "service_name=$REPO_NAME" -var "IMAGE_NAME=asia-southeast1-docker.pkg.dev/${PROJECT_ID}/services/${_SERVICE_NAME}:${COMMIT_SHA}" -var "project_id=$PROJECT_ID" -var "EUREKA_URL=${_EUREKA_ENDPOINT}" -var "JWT_SECRET=${_JWT_KEY}" -var "JWT_EXPIRATION_TIME=${_JWT_EXPIRATION_TIME}" -var "VERSION=$COMMIT_SHA" -var "DATABASE_URL=${_DB_URL}" -var "DATABASE_USERNAME=${_DB_USERNAME}" -var "DATABASE_PASSWORD=${_DB_PASSWORD}" -var "DATABASE_NAME=${_DB_DATABASE}"
+        terraform plan -var "region=asia-southeast1" -var "zone=asia-southeast1-a" -var "service_name=${_SERVICE_NAME}" -var "IMAGE_NAME=asia-southeast1-docker.pkg.dev/${PROJECT_ID}/services/${_SERVICE_NAME}:${COMMIT_SHA}" -var "project_id=$PROJECT_ID" -var "EUREKA_URL=${_EUREKA_ENDPOINT}" -var "JWT_SECRET=${_JWT_KEY}" -var "JWT_EXPIRATION_TIME=${_JWT_EXPIRATION_TIME}" -var "VERSION=$COMMIT_SHA" -var "DATABASE_URL=${_DB_URL}" -var "DATABASE_USERNAME=${_DB_USERNAME}" -var "DATABASE_PASSWORD=${_DB_PASSWORD}" -var "DATABASE_NAME=${_DB_DATABASE}"
   
   - id: 'terraform-apply'
     name: 'hashicorp/terraform:1.0.0'
@@ -39,7 +39,7 @@ steps:
     args:
       - '-c'
       - |
-        terraform apply -auto-approve -var "region=asia-southeast1" -var "zone=asia-southeast1-a" -var "service_name=$REPO_NAME" -var "IMAGE_NAME=asia-southeast1-docker.pkg.dev/${PROJECT_ID}/services/${_SERVICE_NAME}:${COMMIT_SHA}" -var "project_id=$PROJECT_ID" -var "EUREKA_URL=${_EUREKA_ENDPOINT}" -var "JWT_SECRET=${_JWT_KEY}" -var "JWT_EXPIRATION_TIME=${_JWT_EXPIRATION_TIME}" -var "VERSION=$COMMIT_SHA" -var "DATABASE_URL=${_DB_URL}" -var "DATABASE_USERNAME=${_DB_USERNAME}" -var "DATABASE_PASSWORD=${_DB_PASSWORD}" -var "DATABASE_NAME=${_DB_DATABASE}"
+        terraform apply -auto-approve -var "region=asia-southeast1" -var "zone=asia-southeast1-a" -var "service_name=${_SERVICE_NAME}" -var "IMAGE_NAME=asia-southeast1-docker.pkg.dev/${PROJECT_ID}/services/${_SERVICE_NAME}:${COMMIT_SHA}" -var "project_id=$PROJECT_ID" -var "EUREKA_URL=${_EUREKA_ENDPOINT}" -var "JWT_SECRET=${_JWT_KEY}" -var "JWT_EXPIRATION_TIME=${_JWT_EXPIRATION_TIME}" -var "VERSION=$COMMIT_SHA" -var "DATABASE_URL=${_DB_URL}" -var "DATABASE_USERNAME=${_DB_USERNAME}" -var "DATABASE_PASSWORD=${_DB_PASSWORD}" -var "DATABASE_NAME=${_DB_DATABASE}"
   
   - id: 'gcloud-restart-gce'
     name: 'gcr.io/cloud-builders/gcloud'

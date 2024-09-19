@@ -42,4 +42,4 @@ security:
         secret:
             key: 45euytfkfrtyrtykfge65tdyfhkfthjgdrtdghhf
         expiration:
-            time: 86400000
+            time: 1000
