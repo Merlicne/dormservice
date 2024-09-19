@@ -67,11 +67,6 @@ EOF
     scopes = ["cloud-platform"]
   }
 
-  lifecycle {
-    replace_triggered_by = [ 
-      metadata.gce-container-declaration
-     ]
-  }
 }
 
 output "ipInstance" {
