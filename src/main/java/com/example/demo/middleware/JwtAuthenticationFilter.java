@@ -3,13 +3,10 @@ package com.example.demo.middleware;
 import java.io.IOException;
 import java.util.Collections;
 
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -38,8 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     
-    @Value("${security.allow.issuer}")
-    private String issuer;
 
     @Override
     protected void doFilterInternal(
@@ -73,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Claims claims = jwtService.extractAllClaims(token);
                 String tokenIssuer = claims.getIssuer();
 
-                if (!issuer.equals(tokenIssuer)) {
+                if (jwtService.isTokenIssuerValid(tokenIssuer)) {
                     throw new UnAuthorizedException("Invalid token issuer");
                 }
 

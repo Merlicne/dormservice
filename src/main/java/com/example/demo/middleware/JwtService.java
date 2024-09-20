@@ -28,6 +28,9 @@ public class JwtService {
     @Value("${security.jwt.issuer}")
     private String issuer;
 
+    @Value("${security.allow.issuer}")
+    private String allowIssuer;
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -94,5 +97,9 @@ public class JwtService {
     private Key getSignInKey() {
         byte[] keyBytes = secretKey.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public boolean isTokenIssuerValid(String tokenIssuer) {
+        return allowIssuer.equals(tokenIssuer);
     }
 }

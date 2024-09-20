@@ -161,7 +161,7 @@ class DormServiceTest {
         when(dormRepository.findById(dormEntity.getDormID())).thenReturn(java.util.Optional.empty());
 
         assertThrows(NotFoundException.class, () -> {
-            dormService.deleteDorm(dormModel.getDormID().toString(), jwtToken);
+                dormService.deleteDorm(dormModel.getDormID().toString(), jwtToken);
         });
 
         verify(dormRepository, times(0)).deleteById(dormEntity.getDormID());
