@@ -18,7 +18,6 @@ import com.example.demo.util.convertor.AdminConvertor;
 import com.example.demo.util.role_authorization.RoleValidation;
 import com.example.demo.util.validator.RestParamValidator;
 
-import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @Service

@@ -3,7 +3,6 @@ package com.example.demo.service.implement;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -76,13 +75,7 @@ public class AuthenticationService implements IAuthenticationService {
         input.setPassword(passwordEncoder.encode(input.getPassword()));
         Admin admin = AdminConvertor.toEntity(input);
         admin.setRole(Role.ADMIN);
-        try{
-            admin = adminRepository.save(admin);
-        } catch (DataIntegrityViolationException e){
-            throw new BadRequestException("Username already exists");
-        } catch (Exception e){
-            throw new RuntimeException("Internal server error");
-        }
+        admin = adminRepository.save(admin);
         return AdminConvertor.toModel(admin);
     }
 
