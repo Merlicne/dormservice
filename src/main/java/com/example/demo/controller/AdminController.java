@@ -58,7 +58,7 @@ public class AdminController {
     @GetMapping("/admin")
     public ResponseBody<List<AdminModel>> getAlladmin(
                                                 @RequestHeader("Authorization") String token, 
-                                                @RequestParam(required = false) String includedDeleted
+                                                @RequestParam(required = false, name = "includedDeleted") String includedDeleted
                                                 ) {
         Logger.info("Get admin by username");
         JwtToken jwtToken = JwtToken.builder().token(token).build();
@@ -73,7 +73,7 @@ public class AdminController {
     public ResponseBody<AdminModel> getAdminByUsername(
                                                 @RequestHeader("Authorization") String token,
                                                 @PathVariable String username,
-                                                @RequestParam(required = false) String includedDeleted
+                                                @RequestParam(required = false, name = "includedDeleted") String includedDeleted
                                                 ) {
         Logger.info("Get admin by username");
         JwtToken jwtToken = JwtToken.builder().token(token).build();

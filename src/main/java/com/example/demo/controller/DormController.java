@@ -29,7 +29,7 @@ public class DormController {
     @GetMapping("/dorm")
     public ResponseBody<List<DormModel>> getDormInfo(
                                                 @RequestHeader("Authorization") String token,
-                                                @RequestParam(required = false) String includedDeleted   
+                                                @RequestParam(required = false, name = "includedDeleted") String includedDeleted   
                                             ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
@@ -46,7 +46,7 @@ public class DormController {
     public ResponseBody<DormModel> getDormById(
                                             @PathVariable String id, 
                                             @RequestHeader("Authorization") String token,
-                                            @RequestParam(required = false) String includedDeleted
+                                            @RequestParam(required = false, name = "includedDeleted") String includedDeleted
                                             ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();

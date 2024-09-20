@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
@@ -32,7 +33,7 @@ public class BuildingController {
     @GetMapping("/building")
     public ResponseBody<List<BuildingModel>> getBuildingAll(
                                                         @RequestHeader("Authorization") String token,
-                                                        @RequestHeader(required = false) String includedDeleted
+                                                        @RequestParam(required = false, name = "includedDeleted") String includedDeleted
                                                         ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
@@ -49,7 +50,7 @@ public class BuildingController {
     public ResponseBody<BuildingModel> getBuildingById(
                                                     @PathVariable int id, 
                                                     @RequestHeader("Authorization") String token,
-                                                    @RequestHeader(required = false) String includedDeleted
+                                                    @RequestParam(required = false, name = "includedDeleted") String includedDeleted
                                                     ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
