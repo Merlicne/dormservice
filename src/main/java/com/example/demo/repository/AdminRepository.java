@@ -15,10 +15,10 @@ public interface AdminRepository extends JpaRepository<Admin, String> {
 
     Optional<Admin> findByUsername(String username);
 
-    @Query("SELECT a FROM Admin a WHERE a.deleted_at IS NULL")
+    @Query(value = "SELECT * FROM Admin a WHERE a.deleted_at IS NULL", nativeQuery = true)
     List<Admin> findNotDeletedAll();
 
-    @Query("SELECT a FROM Admin a WHERE a.username = ?1 AND a.deleted_at IS NULL")
+    @Query(value = "SELECT * FROM Admin a WHERE a.username = ?1 AND a.deleted_at IS NULL", nativeQuery = true)
     Optional<Admin> findNotDeletedByUsername(String username);
 
 

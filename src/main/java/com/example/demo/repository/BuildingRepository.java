@@ -11,10 +11,10 @@ import com.example.demo.entity.Building;
 @Repository
 public interface BuildingRepository extends JpaRepository<Building, Integer> {
 
-    @Query("SELECT b FROM Buildings b WHERE b.deleted_at IS NULL")
+    @Query(value = "SELECT * FROM Buildings b WHERE b.deleted_at IS NULL", nativeQuery = true)
     List<Building> findNotDeletedAll();
 
-    @Query("SELECT b FROM Buildings b WHERE b.buildingID = ?1 AND b.deleted_at IS NULL")
+    @Query(value = "SELECT * FROM Buildings b WHERE b.buildingID = ?1 AND b.deleted_at IS NULL", nativeQuery = true)
     Optional<Building> findNotDeletedById(int id);
 
 }

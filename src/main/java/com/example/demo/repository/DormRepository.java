@@ -13,9 +13,9 @@ import com.example.demo.entity.Dorm;
 @Repository
 public interface DormRepository extends JpaRepository<Dorm,UUID> {
 
-    @Query("SELECT d FROM Dorm_Info d WHERE d.deleted_at IS NULL")
+    @Query(value = "SELECT * FROM Dorm_Info d WHERE d.deleted_at IS NULL", nativeQuery = true)
     List<Dorm> findNotDeletedAll();
 
-    @Query("SELECT d FROM Dorm_Info d WHERE d.dormID = ?1 AND d.deleted_at IS NULL")
+    @Query(value = "SELECT * FROM Dorm_Info d WHERE d.dormID = ?1 AND d.deleted_at IS NULL", nativeQuery = true)
     Optional<Dorm> findNotDeletedById(UUID id);
 }
