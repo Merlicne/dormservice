@@ -35,6 +35,7 @@ variable "region" {}
 variable "zone" {}
 variable "IMAGE_NAME" {}
 variable "JWT_ISSUER" {}
+variable "JWT_ALLOW_ISSUER" {}
 
 variable "service_name" {
   description = "The name of the Cloud Run service"

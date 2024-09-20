@@ -60,6 +60,8 @@ spec:
           value: "false"
         - name: SECURITY_JWT_ISSUER
           value: ${var.JWT_ISSUER}
+        - name: SECURITY_ALLOW_ISSUER
+          value: ${var.JWT_ALLOW_ISSUER}
       ports:
         - containerPort: 8080
           hostPort: 80
