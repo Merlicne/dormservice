@@ -17,7 +17,9 @@ import com.example.demo.service.IBuildingService;
 import com.example.demo.util.convertor.BuildingConvertor;
 import com.example.demo.util.role_authorization.RoleValidation;
 import com.example.demo.util.validator.BuildingValidator;
+import com.example.demo.util.validator.RestParamValidator;
 
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -30,25 +32,41 @@ public class BuildingService implements IBuildingService {
 
     
     @Override
-    public BuildingModel getBuildingById(int id, JwtToken jwtToken){
+    public BuildingModel getBuildingById(int id, JwtToken jwtToken, String includedDeleted){
         Logger.info("Get building by id");
         
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
+        
+        RestParamValidator.validateIncludedDeleted(includedDeleted);
 
-        Building building = buildingRepository.findById(id).orElseThrow(() -> new NotFoundException("Building not found"));
+
+        Building building;
+        if(includedDeleted.equalsIgnoreCase("true")){
+            building = buildingRepository.findById(id).orElseThrow(() -> new NotFoundException("Building not found"));
+        }else{
+            building = buildingRepository.findNotDeletedById(id).orElseThrow(() -> new NotFoundException("Building not found"));
+        }
         return BuildingConvertor.convertToModel(building);
     }
 
     @Override
-    public List<BuildingModel> getBuildingAll(JwtToken jwtToken){
+    public List<BuildingModel> getBuildingAll(JwtToken jwtToken, String includedDeleted){
         Logger.info("Get all building");
 
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
+
+        RestParamValidator.validateIncludedDeleted(includedDeleted);
+
+        List<Building> building;
+        if(includedDeleted.equalsIgnoreCase("true")){
+            building = buildingRepository.findAll();
+        }else{
+            building = buildingRepository.findNotDeletedAll();
+        }
         
-        List<BuildingModel> buildingModel = BuildingConvertor.convertToModel(buildingRepository.findAll());
-        return buildingModel;
+        return BuildingConvertor.convertToModel(building);
     }
     
     @Override

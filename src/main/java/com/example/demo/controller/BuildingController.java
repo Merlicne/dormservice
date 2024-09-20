@@ -30,12 +30,15 @@ public class BuildingController {
     private final IBuildingService buildingService;
     
     @GetMapping("/building")
-    public ResponseBody<List<BuildingModel>> getBuildingAll(@RequestHeader("Authorization") String token) {
+    public ResponseBody<List<BuildingModel>> getBuildingAll(
+                                                        @RequestHeader("Authorization") String token,
+                                                        @RequestHeader(required = false) String includedDeleted
+                                                        ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
 
 
-        List<BuildingModel> building = buildingService.getBuildingAll(jwtToken);
+        List<BuildingModel> building = buildingService.getBuildingAll(jwtToken, includedDeleted);
         return new ResponseBody<>(
                             200, 
                             "Success", 
@@ -43,11 +46,15 @@ public class BuildingController {
     }
 
     @GetMapping("/building/{id}")
-    public ResponseBody<BuildingModel> getBuildingById(@PathVariable int id, @RequestHeader("Authorization") String token) {
+    public ResponseBody<BuildingModel> getBuildingById(
+                                                    @PathVariable int id, 
+                                                    @RequestHeader("Authorization") String token,
+                                                    @RequestHeader(required = false) String includedDeleted
+                                                    ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
 
-        BuildingModel building = buildingService.getBuildingById(id,jwtToken);
+        BuildingModel building = buildingService.getBuildingById(id,jwtToken, includedDeleted);
         return new ResponseBody<>(
                         200, 
                         "Success", 
@@ -55,7 +62,10 @@ public class BuildingController {
     }
 
     @PostMapping("/building")
-    public ResponseBody<BuildingModel> createBuilding(@RequestBody BuildingModel building, @RequestHeader("Authorization") String token) {
+    public ResponseBody<BuildingModel> createBuilding(
+                                                @RequestBody BuildingModel building, 
+                                                @RequestHeader("Authorization") String token
+                                                ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
         BuildingModel buildingModel = buildingService.createBuilding(building, jwtToken);
@@ -66,7 +76,11 @@ public class BuildingController {
     }
 
     @PutMapping("/building/{id}")
-    public ResponseBody<BuildingModel> updateBuilding(@PathVariable int id, @RequestBody BuildingModel building, @RequestHeader("Authorization") String token) {
+    public ResponseBody<BuildingModel> updateBuilding(
+                                                @PathVariable int id, 
+                                                @RequestBody BuildingModel building, 
+                                                @RequestHeader("Authorization") String token
+                                                ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
         BuildingModel buildingModel = buildingService.updateBuilding(id, building, jwtToken);
@@ -74,7 +88,10 @@ public class BuildingController {
     }
 
     @DeleteMapping("/building/{id}")
-    public ResponseBody<String> deleteBuilding(@PathVariable int id, @RequestHeader("Authorization") String token) {
+    public ResponseBody<String> deleteBuilding(
+                                            @PathVariable int id, 
+                                            @RequestHeader("Authorization") String token
+                                            ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
         buildingService.deleteBuilding(id, jwtToken);

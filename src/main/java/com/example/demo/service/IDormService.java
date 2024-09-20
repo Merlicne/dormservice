@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface IDormService {
     
-    List<DormModel> getAllDorm(JwtToken jwtToken);
+    List<DormModel> getAllDorm(JwtToken jwtToken, String includedDeleted);
 
-    DormModel getDormById(String id,JwtToken jwtToken);
+    DormModel getDormById(String id,JwtToken jwtToken, String includedDeleted);
 
     DormModel createDorm(DormModel dorm,JwtToken jwtToken);
 

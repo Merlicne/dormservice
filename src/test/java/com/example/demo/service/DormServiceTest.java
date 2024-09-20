@@ -83,7 +83,7 @@ class DormServiceTest {
         when(dormRepository.findAll()).thenReturn(List.of(dormEntity));
         when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
 
-        List<DormModel> dormModels = dormService.getAllDorm(jwtToken);
+        List<DormModel> dormModels = dormService.getAllDorm(jwtToken, "true");
 
         assertNotNull(dormModels);
         assertEquals(1, dormModels.size());
@@ -95,7 +95,7 @@ class DormServiceTest {
         when(dormRepository.findById(dormEntity.getDormID())).thenReturn(java.util.Optional.of(dormEntity));
         when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
 
-        DormModel dorm = dormService.getDormById(dormEntity.getDormID().toString(), jwtToken);
+        DormModel dorm = dormService.getDormById(dormEntity.getDormID().toString(), jwtToken, "true");
 
         assertNotNull(dorm);
         assertEquals(this.dormModel, dorm);
@@ -107,7 +107,7 @@ class DormServiceTest {
         when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
 
         assertThrows(NotFoundException.class, () -> {
-            dormService.getDormById(dormEntity.getDormID().toString(), jwtToken);
+            dormService.getDormById(dormEntity.getDormID().toString(), jwtToken, "true");
         });
     }
 

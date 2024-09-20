@@ -89,7 +89,7 @@ class BuildingServiceTest {
         when(buildingRepository.findAll()).thenReturn(List.of(buildingEntity));
         when(jwtService.extractRole(anyString())).thenReturn(Role.ADMIN);
 
-        List<BuildingModel> result = buildingService.getBuildingAll(jwtToken);
+        List<BuildingModel> result = buildingService.getBuildingAll(jwtToken, "true");
         
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -101,7 +101,7 @@ class BuildingServiceTest {
         when(buildingRepository.findById(anyInt())).thenReturn(Optional.of(buildingEntity));
         when(jwtService.extractRole(anyString())).thenReturn(Role.ADMIN);
 
-        BuildingModel result = buildingService.getBuildingById(1, jwtToken);
+        BuildingModel result = buildingService.getBuildingById(1, jwtToken, "true");
 
         assertNotNull(result);
         assertEquals("Test Building", result.getBuildingName());
@@ -125,7 +125,7 @@ class BuildingServiceTest {
         when(buildingRepository.findById(anyInt())).thenReturn(Optional.empty());
         when(jwtService.extractRole(anyString())).thenReturn(Role.ADMIN);
 
-        NotFoundException thrown = assertThrows(NotFoundException.class, () -> buildingService.getBuildingById(999, jwtToken));
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> buildingService.getBuildingById(999, jwtToken, "true"));
         assertEquals("Building not found", thrown.getMessage());
     }
 

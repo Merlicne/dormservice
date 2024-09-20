@@ -14,6 +14,7 @@ import com.example.demo.model.JwtToken;
 import com.example.demo.repository.DormRepository;
 import com.example.demo.util.convertor.DormConvertor;
 import com.example.demo.util.role_authorization.RoleValidation;
+import com.example.demo.util.validator.RestParamValidator;
 import com.example.demo.service.IDormService;
 
 
@@ -31,26 +32,41 @@ public class DormService implements IDormService {
 
     private final JwtService jwtService;
 
-    public List<DormModel> getAllDorm(JwtToken jwtToken) {
+    public List<DormModel> getAllDorm(JwtToken jwtToken, String includedDeleted) {
         Logger.info("Get all dorms");
         
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
 
+        RestParamValidator.validateIncludedDeleted(includedDeleted);
 
-        List<Dorm> dorm = dormRepository.findAll();
+        List<Dorm> dorm;
+        if (includedDeleted.equalsIgnoreCase("true")){
+            dorm = dormRepository.findAll();
+        }else{
+            dorm = dormRepository.findNotDeletedAll();
+        }   
 
         return DormConvertor.toModel(dorm);
     }
 
-    public DormModel getDormById(String id,JwtToken jwtToken) {
+    public DormModel getDormById(String id,JwtToken jwtToken, String includedDeleted) {
         Logger.info("Get dorm by id");
 
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
 
         UUID uuid = UUID.fromString(id);
-        Dorm dorm = dormRepository.findById(uuid).orElseThrow(() -> new NotFoundException("Dorm not found"));
+
+        RestParamValidator.validateIncludedDeleted(includedDeleted);
+
+
+        Dorm dorm;
+        if (includedDeleted.equalsIgnoreCase("true")){
+            dorm = dormRepository.findById(uuid).orElseThrow(() -> new NotFoundException("Dorm not found"));
+        }else{
+            dorm = dormRepository.findNotDeletedById(uuid).orElseThrow(() -> new NotFoundException("Dorm not found"));
+        }
         return DormConvertor.toModel(dorm);
     }
 
