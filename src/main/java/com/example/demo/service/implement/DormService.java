@@ -38,7 +38,7 @@ public class DormService implements IDormService {
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
 
-        RestParamValidator.validateIncludedDeleted(includedDeleted);
+        includedDeleted =RestParamValidator.validateIncludedDeleted(includedDeleted);
 
         List<Dorm> dorm;
         if (includedDeleted.equalsIgnoreCase("true")){
@@ -58,7 +58,7 @@ public class DormService implements IDormService {
 
         UUID uuid = UUID.fromString(id);
 
-        RestParamValidator.validateIncludedDeleted(includedDeleted);
+        includedDeleted =RestParamValidator.validateIncludedDeleted(includedDeleted);
 
 
         Dorm dorm;

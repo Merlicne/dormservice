@@ -38,7 +38,7 @@ public class BuildingService implements IBuildingService {
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
         
-        RestParamValidator.validateIncludedDeleted(includedDeleted);
+        includedDeleted =RestParamValidator.validateIncludedDeleted(includedDeleted);
 
 
         Building building;
@@ -57,7 +57,7 @@ public class BuildingService implements IBuildingService {
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
 
-        RestParamValidator.validateIncludedDeleted(includedDeleted);
+        includedDeleted =RestParamValidator.validateIncludedDeleted(includedDeleted);
 
         List<Building> building;
         if(includedDeleted.equalsIgnoreCase("true")){

@@ -7,9 +7,13 @@ public class RestParamValidator {
     }
 
 
-    public static void validateIncludedDeleted(String includedDeleted) {
+    public static String validateIncludedDeleted(String includedDeleted) {
         if (includedDeleted != null && !includedDeleted.equals("true") && !includedDeleted.equals("false")) {
             throw new IllegalArgumentException("includedDeleted must be true or false");
         }
+        if (includedDeleted == null) {
+            includedDeleted = "false";
+        }
+        return includedDeleted;
     }
 }

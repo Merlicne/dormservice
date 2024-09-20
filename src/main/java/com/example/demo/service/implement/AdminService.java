@@ -35,7 +35,7 @@ public class AdminService implements IAdminServcie{
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN);
 
-        RestParamValidator.validateIncludedDeleted(includedDeleted);
+        includedDeleted =RestParamValidator.validateIncludedDeleted(includedDeleted);
 
         List<Admin> adminModel;
         if(includedDeleted.equalsIgnoreCase("true")){
@@ -53,7 +53,7 @@ public class AdminService implements IAdminServcie{
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN);
 
-        RestParamValidator.validateIncludedDeleted(includedDeleted);
+        includedDeleted =RestParamValidator.validateIncludedDeleted(includedDeleted);
 
         Admin admin;
         if(includedDeleted.equalsIgnoreCase("true")){
