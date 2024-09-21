@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.hibernate.annotations.UpdateTimestamp;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,10 +38,11 @@ public class Admin implements UserDetails {
     private String email;
     private String phone;
 
-    
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

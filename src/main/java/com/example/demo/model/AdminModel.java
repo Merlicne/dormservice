@@ -3,6 +3,7 @@ package com.example.demo.model;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,8 @@ public class AdminModel {
     
     @JsonAlias("username")
     private String username;
+    
+    @JsonIgnore
     @JsonAlias("password")
     private String password;
     @JsonAlias("name")
