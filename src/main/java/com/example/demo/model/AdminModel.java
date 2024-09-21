@@ -19,7 +19,6 @@ public class AdminModel {
     @JsonAlias("username")
     private String username;
     
-    @JsonIgnore
     @JsonAlias("password")
     private String password;
     @JsonAlias("name")
