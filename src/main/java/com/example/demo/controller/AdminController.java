@@ -61,6 +61,7 @@ public class AdminController {
                                                 @RequestParam(required = false, name = "includedDeleted") String includedDeleted
                                                 ) {
         Logger.info("Get admin by username");
+        token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
         List<AdminModel> adminModel = adminService.getAllAdmin(jwtToken, includedDeleted);
         return new ResponseBody<>(
@@ -76,6 +77,7 @@ public class AdminController {
                                                 @RequestParam(required = false, name = "includedDeleted") String includedDeleted
                                                 ) {
         Logger.info("Get admin by username");
+        token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
         AdminModel adminModel = adminService.getAdminByUsername(username, jwtToken, includedDeleted);
         return new ResponseBody<>(
@@ -91,6 +93,7 @@ public class AdminController {
                                             @RequestBody AdminModel admin
                                             ) {
         Logger.info("Update admin");
+        token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
         AdminModel adminModel = adminService.updateAdmin(username, admin, jwtToken);
         return new ResponseBody<>(
@@ -106,6 +109,7 @@ public class AdminController {
                                         @PathVariable String username
                                         ) {
         Logger.info("Delete admin");
+        token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
         adminService.deleteAdmin(username, jwtToken);
         return new ResponseBody<>(
