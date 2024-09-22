@@ -11,7 +11,10 @@ public interface IDormService {
     
     @Retryable(retryFor = RuntimeException.class, maxAttempts = 5)
     DormModel getLatestDorm(JwtToken jwtToken);
+
+    @Retryable(retryFor = RuntimeException.class, maxAttempts = 5)
     List<DormModel> getUpdatedHistory(JwtToken jwtToken);
+    
     DormModel createDorm(DormModel dorm,JwtToken jwtToken);
 
 
