@@ -86,6 +86,7 @@ public class AdminService implements IAdminServcie{
         adminEntity.setPassword(passwordEncoder.encode(admin.getPassword()));
         adminEntity.setCreatedAt(oldAdmin.getCreatedAt());
         adminEntity.setDeletedAt(oldAdmin.getDeletedAt());
+        adminEntity.setRole(oldAdmin.getRole());
         adminRepository.save(adminEntity);
         return AdminConvertor.toModel(adminEntity);
     }
