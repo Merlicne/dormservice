@@ -13,9 +13,13 @@ import com.example.demo.entity.Dorm;
 @Repository
 public interface DormRepository extends JpaRepository<Dorm,UUID> {
 
-    @Query(value = "SELECT * FROM Dorm_Info d WHERE d.deleted_at IS NULL", nativeQuery = true)
-    List<Dorm> findNotDeletedAll();
+    // @Query(value = "SELECT * FROM Dorm_Info d WHERE d.deleted_at IS NULL", nativeQuery = true)
+    // List<Dorm> findNotDeletedAll();
 
-    @Query(value = "SELECT * FROM Dorm_Info d WHERE d.dormID = ?1 AND d.deleted_at IS NULL", nativeQuery = true)
-    Optional<Dorm> findNotDeletedById(UUID id);
+    // @Query(value = "SELECT * FROM Dorm_Info d WHERE d.dormID = ?1 AND d.deleted_at IS NULL", nativeQuery = true)
+    // Optional<Dorm> findNotDeletedById(UUID id);
+
+    @Query(value = "SELECT * FROM Dorm_info d ORDER BY d.created_at DESC LIMIT 1", nativeQuery = true)
+    Optional<Dorm> findLatestDorm();
+
 }

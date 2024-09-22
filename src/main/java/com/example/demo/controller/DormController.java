@@ -27,14 +27,13 @@ public class DormController {
     private final IDormService dormService;
 
     @GetMapping("/dorm")
-    public ResponseBody<List<DormModel>> getDormInfo(
-                                                @RequestHeader("Authorization") String token,
-                                                @RequestParam(required = false, name = "includedDeleted") String includedDeleted   
+    public ResponseBody<DormModel> getDormInfo(
+                                                @RequestHeader("Authorization") String token 
                                             ) {
         token = token.substring(7);
         JwtToken jwtToken = JwtToken.builder().token(token).build();
 
-        List<DormModel> dorm = dormService.getAllDorm(jwtToken, includedDeleted);
+        DormModel dorm = dormService.getLatestDorm(jwtToken);
         return new ResponseBody<>(
                             200, 
                             "Success", 
@@ -42,21 +41,21 @@ public class DormController {
         
     }
 
-    @GetMapping("/dorm/{id}")
-    public ResponseBody<DormModel> getDormById(
-                                            @PathVariable String id, 
-                                            @RequestHeader("Authorization") String token,
-                                            @RequestParam(required = false, name = "includedDeleted") String includedDeleted
-                                            ) {
-        token = token.substring(7);
-        JwtToken jwtToken = JwtToken.builder().token(token).build();
+    // @GetMapping("/dorm/{id}")
+    // public ResponseBody<DormModel> getDormById(
+    //                                         @PathVariable String id, 
+    //                                         @RequestHeader("Authorization") String token,
+    //                                         @RequestParam(required = false, name = "includedDeleted") String includedDeleted
+    //                                         ) {
+    //     token = token.substring(7);
+    //     JwtToken jwtToken = JwtToken.builder().token(token).build();
 
-        DormModel dorm = dormService.getDormById(id, jwtToken, includedDeleted);
-        return new ResponseBody<>(
-                        200, 
-                        "Success", 
-                        dorm);
-    }
+    //     DormModel dorm = dormService.getDormById(id, jwtToken, includedDeleted);
+    //     return new ResponseBody<>(
+    //                     200, 
+    //                     "Success", 
+    //                     dorm);
+    // }
 
     @PostMapping("/dorm")
     public ResponseBody<DormModel> createDorm(
@@ -74,33 +73,33 @@ public class DormController {
                                 dormModel);
     }
 
-    @PutMapping("/dorm/{id}")
-    public ResponseBody<DormModel> updateDorm(
-                                            @PathVariable String id,
-                                            @RequestBody DormModel dorm, 
-                                            @RequestHeader("Authorization") String token
-                                            ) {
+    // @PutMapping("/dorm/{id}")
+    // public ResponseBody<DormModel> updateDorm(
+    //                                         @PathVariable String id,
+    //                                         @RequestBody DormModel dorm, 
+    //                                         @RequestHeader("Authorization") String token
+    //                                         ) {
 
-        token = token.substring(7);
-        JwtToken jwtToken = JwtToken.builder().token(token).build();
+    //     token = token.substring(7);
+    //     JwtToken jwtToken = JwtToken.builder().token(token).build();
 
-        DormModel dormModel = dormService.updateDorm(id, dorm,jwtToken);
-        return new ResponseBody<>(200, "Success", dormModel);
-    }
+    //     DormModel dormModel = dormService.updateDorm(id, dorm,jwtToken);
+    //     return new ResponseBody<>(200, "Success", dormModel);
+    // }
 
-    @DeleteMapping("/dorm/{id}")
-    public ResponseBody<String> deleteDorm(
-                                            @PathVariable String id, 
-                                            @RequestHeader("Authorization") String token
-                                            ) {
+    // @DeleteMapping("/dorm/{id}")
+    // public ResponseBody<String> deleteDorm(
+    //                                         @PathVariable String id, 
+    //                                         @RequestHeader("Authorization") String token
+    //                                         ) {
 
-        token = token.substring(7);
-        JwtToken jwtToken = JwtToken.builder().token(token).build();
+    //     token = token.substring(7);
+    //     JwtToken jwtToken = JwtToken.builder().token(token).build();
 
-        dormService.deleteDorm(id, jwtToken);
-        return new ResponseBody<>(200, "Success", "Deleted");
+    //     dormService.deleteDorm(id, jwtToken);
+    //     return new ResponseBody<>(200, "Success", "Deleted");
 
-    }
+    // }
 
 
 

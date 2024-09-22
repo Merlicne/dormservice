@@ -5,16 +5,20 @@ import com.example.demo.model.JwtToken;
 
 import java.util.List;
 
+import org.springframework.retry.annotation.Retryable;
+
 public interface IDormService {
     
-    List<DormModel> getAllDorm(JwtToken jwtToken, String includedDeleted);
+    @Retryable(retryFor = RuntimeException.class, maxAttempts = 5)
+    DormModel getLatestDorm(JwtToken jwtToken);
 
-    DormModel getDormById(String id,JwtToken jwtToken, String includedDeleted);
+    // @Retryable(retryFor = RuntimeException.class, maxAttempts = 5)
+    // DormModel getDormById(String id,JwtToken jwtToken, String includedDeleted);
 
     DormModel createDorm(DormModel dorm,JwtToken jwtToken);
 
-    DormModel updateDorm(String id, DormModel dorm,JwtToken jwtToken);
+    // DormModel updateDorm(String id, DormModel dorm,JwtToken jwtToken);
 
-    void deleteDorm(String id,JwtToken jwtToken);
+    // void deleteDorm(String id,JwtToken jwtToken);
 
 }

@@ -44,16 +44,19 @@ public class Dorm {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "creater_token")
+    private String createrToken;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    // @UpdateTimestamp
+    // @Column(name = "updated_at")
+    // private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    // @Column(name = "deleted_at")
+    // private LocalDateTime deletedAt;
     
     
 }

@@ -17,9 +17,8 @@ public class DormConvertor {
                 .name(entity.getName())
                 .telephone(entity.getTelephone())
                 .address(entity.getAddress())
+                .createrToken(entity.getCreaterToken())
                 .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .deletedAt(entity.getDeletedAt())
                 .build();
     }
 
@@ -30,9 +29,8 @@ public class DormConvertor {
                 .name(model.getName())
                 .telephone(model.getTelephone())
                 .address(model.getAddress())
+                .createrToken(model.getCreaterToken())
                 .createdAt(model.getCreatedAt())
-                .updatedAt(model.getUpdatedAt())
-                .deletedAt(model.getDeletedAt())
                 .build();
     }
 

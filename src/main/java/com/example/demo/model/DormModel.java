@@ -27,14 +27,11 @@ public class DormModel {
     @JsonAlias("address")
     private String address;
 
+    @JsonAlias("createrToken")
+    private String createrToken;
+
     @JsonAlias("createdAt")
     private LocalDateTime createdAt;
-
-    @JsonAlias("updatedAt")
-    private LocalDateTime updatedAt;
-    
-    @JsonAlias("deletedAt")
-    private LocalDateTime deletedAt;
 
 
 }

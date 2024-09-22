@@ -3,7 +3,6 @@ package com.example.demo.middleware;
 import java.io.IOException;
 import java.util.Collections;
 
-
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,32 +25,28 @@ import com.example.demo.exception.UnAuthorizedException;
 
 import io.jsonwebtoken.Claims;
 
-
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    
-    private final HandlerExceptionResolver handlerExceptionResolver;
 
+    private final HandlerExceptionResolver handlerExceptionResolver;
     private final JwtService jwtService;
-    
 
     @Override
     protected void doFilterInternal(
-        @NonNull HttpServletRequest request,
-        @NonNull HttpServletResponse response,
-        @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
-               final String authHeader = request.getHeader("Authorization");
+                                    @NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain
+                                ) throws ServletException, IOException {
+        final String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-        
-        try{
-            final String token = authHeader.substring(7);
 
+        try {
+            final String token = authHeader.substring(7);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication == null) {
@@ -64,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (username == null || role == null) {
                     throw new UnAuthorizedException("Invalid token");
                 }
-                
+
                 Claims claims = jwtService.extractAllClaims(token);
                 String tokenIssuer = claims.getIssuer();
 
@@ -73,13 +68,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
 
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority(tokenIssuer);
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null,Collections.singleton(authority));
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null,
+                        Collections.singleton(authority));
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
                 filterChain.doFilter(request, response);
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
         }
     }

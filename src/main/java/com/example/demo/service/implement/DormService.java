@@ -32,43 +32,37 @@ public class DormService implements IDormService {
 
     private final JwtService jwtService;
 
-    public List<DormModel> getAllDorm(JwtToken jwtToken, String includedDeleted) {
-        Logger.info("Get all dorms");
+    public DormModel getLatestDorm(JwtToken jwtToken) {
+        Logger.info("get latest dorm update");
         
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
 
-        includedDeleted =RestParamValidator.validateIncludedDeleted(includedDeleted);
-
-        List<Dorm> dorm;
-        if (includedDeleted.equalsIgnoreCase("true")){
-            dorm = dormRepository.findAll();
-        }else{
-            dorm = dormRepository.findNotDeletedAll();
-        }   
+        Dorm dorm = dormRepository.findLatestDorm().orElseThrow(() -> new NotFoundException("Dorm not found"));
+        
 
         return DormConvertor.toModel(dorm);
     }
 
-    public DormModel getDormById(String id,JwtToken jwtToken, String includedDeleted) {
-        Logger.info("Get dorm by id");
+    // public DormModel getDormById(String id,JwtToken jwtToken, String includedDeleted) {
+    //     Logger.info("Get dorm by id");
 
-        Role role = jwtService.extractRole(jwtToken.getToken());
-        RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
+    //     Role role = jwtService.extractRole(jwtToken.getToken());
+    //     RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
 
-        UUID uuid = UUID.fromString(id);
+    //     UUID uuid = UUID.fromString(id);
 
-        includedDeleted =RestParamValidator.validateIncludedDeleted(includedDeleted);
+    //     includedDeleted =RestParamValidator.validateIncludedDeleted(includedDeleted);
 
 
-        Dorm dorm;
-        if (includedDeleted.equalsIgnoreCase("true")){
-            dorm = dormRepository.findById(uuid).orElseThrow(() -> new NotFoundException("Dorm not found"));
-        }else{
-            dorm = dormRepository.findNotDeletedById(uuid).orElseThrow(() -> new NotFoundException("Dorm not found"));
-        }
-        return DormConvertor.toModel(dorm);
-    }
+    //     Dorm dorm;
+    //     if (includedDeleted.equalsIgnoreCase("true")){
+    //         dorm = dormRepository.findById(uuid).orElseThrow(() -> new NotFoundException("Dorm not found"));
+    //     }else{
+    //         dorm = dormRepository.findNotDeletedById(uuid).orElseThrow(() -> new NotFoundException("Dorm not found"));
+    //     }
+    //     return DormConvertor.toModel(dorm);
+    // }
 
     @Transactional
     public DormModel createDorm(DormModel dorm,JwtToken jwtToken) {
@@ -78,42 +72,43 @@ public class DormService implements IDormService {
         RoleValidation.allowRoles(role, Role.ADMIN);
 
         Dorm dormEntity = DormConvertor.toEntity(dorm);
+        dormEntity.setCreaterToken(jwtToken.getToken());
         dormEntity = dormRepository.save(dormEntity);
 
         return DormConvertor.toModel(dormEntity);
     }
 
-    @Transactional
-    public DormModel updateDorm(String id, DormModel dorm,JwtToken jwtToken) {
-        Logger.info("Update dorm");
+    // @Transactional
+    // public DormModel updateDorm(String id, DormModel dorm,JwtToken jwtToken) {
+    //     Logger.info("Update dorm");
 
-        Role role = jwtService.extractRole(jwtToken.getToken());
-        RoleValidation.allowRoles(role, Role.ADMIN);
+    //     Role role = jwtService.extractRole(jwtToken.getToken());
+    //     RoleValidation.allowRoles(role, Role.ADMIN);
 
-        UUID uuid = UUID.fromString(id);
-        Dorm oldDorm = dormRepository.findById(uuid).orElseThrow(() -> new NotFoundException("Dorm not found"));
+    //     UUID uuid = UUID.fromString(id);
+    //     Dorm oldDorm = dormRepository.findById(uuid).orElseThrow(() -> new NotFoundException("Dorm not found"));
         
-        dorm.setDormID(uuid);
-        Dorm dormEntity = DormConvertor.toEntity(dorm);
+    //     dorm.setDormID(uuid);
+    //     Dorm dormEntity = DormConvertor.toEntity(dorm);
 
-        dormEntity.setCreatedAt(oldDorm.getCreatedAt());
-        dormEntity.setDeletedAt(oldDorm.getDeletedAt());
-        dormEntity = dormRepository.save(dormEntity);
-        return DormConvertor.toModel(dormEntity);
-    }
+    //     dormEntity.setCreatedAt(oldDorm.getCreatedAt());
+    //     dormEntity.setDeletedAt(oldDorm.getDeletedAt());
+    //     dormEntity = dormRepository.save(dormEntity);
+    //     return DormConvertor.toModel(dormEntity);
+    // }
 
-    @Transactional
-    public void deleteDorm(String id,JwtToken jwtToken) {
-        Logger.info("Delete dorm");
+    // @Transactional
+    // public void deleteDorm(String id,JwtToken jwtToken) {
+    //     Logger.info("Delete dorm");
 
-        Role role = jwtService.extractRole(jwtToken.getToken());
-        RoleValidation.allowRoles(role, Role.ADMIN);
+    //     Role role = jwtService.extractRole(jwtToken.getToken());
+    //     RoleValidation.allowRoles(role, Role.ADMIN);
 
-        dormRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException("Dorm not found"));
+    //     dormRepository.findById(UUID.fromString(id)).orElseThrow(() -> new NotFoundException("Dorm not found"));
 
-        UUID uuid = UUID.fromString(id);
-        dormRepository.deleteById(uuid);
-    }
+    //     UUID uuid = UUID.fromString(id);
+    //     dormRepository.deleteById(uuid);
+    // }
 
  
 
