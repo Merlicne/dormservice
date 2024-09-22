@@ -22,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.demo.entity.Dorm;
 import com.example.demo.entity.Role;
 import com.example.demo.exception.ForbiddenException;
-import com.example.demo.exception.NotFoundException;
 import com.example.demo.middleware.JwtService;
 import com.example.demo.model.DormModel;
 import com.example.demo.model.JwtToken;
