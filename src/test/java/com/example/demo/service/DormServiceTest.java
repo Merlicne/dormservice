@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -64,7 +63,7 @@ class DormServiceTest {
                 .telephone("0123456789")
                 .address("Test Address")
                 .createdAt(LocalDateTime.parse(date, formatter))
-                .createrToken("token")
+                .creater("admin")
                 .build();
 
         dormModel = DormModel.builder()
@@ -73,7 +72,7 @@ class DormServiceTest {
                     .telephone("0123456789")
                     .address("Test Address")
                     .createdAt(LocalDateTime.parse(date, formatter))
-                    .createrToken("token")
+                    .creater("admin")
                     .build();
     }
 
@@ -88,82 +87,17 @@ class DormServiceTest {
         assertEquals(dormModel, dormModels);
     }
 
-    // @Test
-    // void testGetDormById() {
-    //     when(dormRepository.findById(dormEntity.getDormID())).thenReturn(java.util.Optional.of(dormEntity));
-    //     when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
-
-    //     DormModel dorm = dormService.getDormById(dormEntity.getDormID().toString(), jwtToken, "true");
-
-    //     assertNotNull(dorm);
-    //     assertEquals(this.dormModel, dorm);
-    // }
-
-    // @Test
-    // void testGetDormByIdNotFound() {
-    //     when(dormRepository.findById(dormEntity.getDormID())).thenReturn(java.util.Optional.empty());
-    //     when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
-
-    //     assertThrows(NotFoundException.class, () -> {
-    //         dormService.getDormById(dormEntity.getDormID().toString(), jwtToken, "true");
-    //     });
-    // }
-
     @Test
     void testCreateDorm() {
         when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
         when(dormRepository.save(dormEntity)).thenReturn(dormEntity);
+        when(jwtService.extractUsername(jwtToken.getToken())).thenReturn("admin");
 
         DormModel dorm = dormService.createDorm(dormModel, jwtToken);
 
         assertNotNull(dorm);
         assertEquals(this.dormModel, dorm);
     }
-
-    // @Test
-    // void testUpdateDorm() {
-    //     when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
-    //     when(dormRepository.findById(dormEntity.getDormID())).thenReturn(java.util.Optional.of(dormEntity));
-    //     when(dormRepository.save(dormEntity)).thenReturn(dormEntity);
-
-    //     DormModel dorm = dormService.updateDorm(dormEntity.getDormID().toString(), dormModel, jwtToken);
-
-    //     assertNotNull(dorm);
-    //     assertEquals(this.dormModel, dorm);
-    //     verify(dormRepository).save(dormEntity);
-    // }
-
-    // @Test
-    // void testUpdateDormNotFound() {
-    //     when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
-    //     when(dormRepository.findById(dormEntity.getDormID())).thenReturn(java.util.Optional.empty());
-
-    //     assertThrows(NotFoundException.class, () -> {
-    //         dormService.updateDorm(dormModel.getDormID().toString(), dormModel, jwtToken);
-    //     });
-    // }
-
-    // @Test
-    // void testDeleteDorm() {
-    //     when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
-    //     when(dormRepository.findById(dormEntity.getDormID())).thenReturn(java.util.Optional.of(dormEntity));
-
-    //     dormService.deleteDorm(dormEntity.getDormID().toString(), jwtToken);
-
-    //     verify(dormRepository).deleteById(dormEntity.getDormID());
-    // }
-
-    // @Test
-    // void testDeleteDormNotFound() {
-    //     when(jwtService.extractRole(jwtToken.getToken())).thenReturn(Role.ADMIN);
-    //     when(dormRepository.findById(dormEntity.getDormID())).thenReturn(java.util.Optional.empty());
-
-    //     assertThrows(NotFoundException.class, () -> {
-    //             dormService.deleteDorm(dormModel.getDormID().toString(), jwtToken);
-    //     });
-
-    //     verify(dormRepository, times(0)).deleteById(dormEntity.getDormID());
-    // }
 
     @Test
     void testDormInvalidRole() {

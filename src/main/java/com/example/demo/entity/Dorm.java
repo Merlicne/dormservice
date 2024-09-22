@@ -44,8 +44,8 @@ public class Dorm {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "creater_token")
-    private String createrToken;
+    @Column(name = "creater")
+    private String creater;
 
     @CreationTimestamp
     @Column(name = "created_at")

@@ -17,7 +17,7 @@ public class DormConvertor {
                 .name(entity.getName())
                 .telephone(entity.getTelephone())
                 .address(entity.getAddress())
-                .createrToken(entity.getCreaterToken())
+                .creater(entity.getCreater())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
@@ -29,7 +29,7 @@ public class DormConvertor {
                 .name(model.getName())
                 .telephone(model.getTelephone())
                 .address(model.getAddress())
-                .createrToken(model.getCreaterToken())
+                .creater(model.getCreater())
                 .createdAt(model.getCreatedAt())
                 .build();
     }

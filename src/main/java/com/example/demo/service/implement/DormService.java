@@ -72,7 +72,9 @@ public class DormService implements IDormService {
         RoleValidation.allowRoles(role, Role.ADMIN);
 
         Dorm dormEntity = DormConvertor.toEntity(dorm);
-        dormEntity.setCreaterToken(jwtToken.getToken());
+
+        String creater = jwtService.extractUsername(jwtToken.getToken());
+        dormEntity.setCreater(creater);
         dormEntity = dormRepository.save(dormEntity);
 
         return DormConvertor.toModel(dormEntity);
