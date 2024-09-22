@@ -2,6 +2,7 @@ package com.example.demo.service.implement;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Admin;
@@ -26,6 +27,7 @@ public class AdminService implements IAdminServcie{
     
     private final AdminRepository adminRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<AdminModel> getAllAdmin(JwtToken jwtToken, String includedDeleted) {
@@ -81,6 +83,7 @@ public class AdminService implements IAdminServcie{
         Admin oldAdmin = adminRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Admin not found"));
         Admin adminEntity = AdminConvertor.toEntity(admin);
         adminEntity.setUsername(username);
+        adminEntity.setPassword(passwordEncoder.encode(admin.getPassword()));
         adminEntity.setCreatedAt(oldAdmin.getCreatedAt());
         adminEntity.setDeletedAt(oldAdmin.getDeletedAt());
         adminRepository.save(adminEntity);
