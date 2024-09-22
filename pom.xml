@@ -97,6 +97,12 @@
 			<artifactId>spring-aspects</artifactId>
 			<version>6.1.5</version>
 		</dependency>
+
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
