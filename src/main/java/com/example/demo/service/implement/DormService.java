@@ -45,7 +45,7 @@ public class DormService implements IDormService {
         Logger.info("get updated history");
 
         Role role = jwtService.extractRole(jwtToken.getToken());
-        RoleValidation.allowRoles(role, Role.ADMIN, Role.TENANT);
+        RoleValidation.allowRoles(role, Role.ADMIN);
 
         List<Dorm> dorms = dormRepository.findUpdatedHistory();
         return DormConvertor.toModel(dorms);
