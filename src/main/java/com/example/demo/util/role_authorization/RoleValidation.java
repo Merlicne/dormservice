@@ -1,6 +1,6 @@
 package com.example.demo.util.role_authorization;
 
-import com.example.demo.entity.Role;
+import com.example.demo.enums.Role;
 import com.example.demo.exception.ForbiddenException;
 import com.example.demo.exception.UnAuthorizedException;
 

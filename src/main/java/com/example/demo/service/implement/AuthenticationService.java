@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Admin;
+import com.example.demo.enums.Role;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.logs.Logger;
@@ -23,7 +24,6 @@ import com.example.demo.model.LoginRequest;
 import com.example.demo.model.JwtToken;
 import com.example.demo.util.convertor.AdminConvertor;
 import com.example.demo.util.validator.PasswordValidator;
-import com.example.demo.entity.Role;
 
 
 @Service

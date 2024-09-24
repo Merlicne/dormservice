@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import com.example.demo.entity.Role;
+import com.example.demo.enums.Role;
 import com.example.demo.exception.UnAuthorizedException;
 
 import io.jsonwebtoken.Claims;

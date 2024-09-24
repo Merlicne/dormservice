@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import com.example.demo.entity.Building;
-import com.example.demo.entity.Role;
+import com.example.demo.enums.Role;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.exception.ForbiddenException;
 import com.example.demo.exception.BadRequestException;

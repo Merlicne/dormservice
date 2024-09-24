@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import com.example.demo.entity.Dorm;
-import com.example.demo.entity.Role;
+import com.example.demo.enums.Role;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.logs.Logger;
 import com.example.demo.middleware.JwtService;

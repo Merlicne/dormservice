@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Admin;
-import com.example.demo.entity.Role;
+import com.example.demo.enums.Role;
 import com.example.demo.exception.ForbiddenException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.logs.Logger;
@@ -83,6 +83,9 @@ public class AdminService implements IAdminServcie{
         Admin oldAdmin = adminRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Admin not found"));
         Admin adminEntity = AdminConvertor.toEntity(admin);
         adminEntity.setUsername(username);
+        if(admin.getPassword() == null){
+            adminEntity.setPassword(oldAdmin.getPassword());
+        }
         adminEntity.setPassword(passwordEncoder.encode(admin.getPassword()));
         adminEntity.setCreatedAt(oldAdmin.getCreatedAt());
         adminEntity.setDeletedAt(oldAdmin.getDeletedAt());

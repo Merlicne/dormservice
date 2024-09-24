@@ -8,6 +8,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.demo.enums.Role;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.hibernate.annotations.UpdateTimestamp;
 
