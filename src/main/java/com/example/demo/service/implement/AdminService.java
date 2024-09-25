@@ -75,18 +75,14 @@ public class AdminService implements IAdminServcie{
 
         Role role = jwtService.extractRole(jwtToken.getToken());
         RoleValidation.allowRoles(role, Role.ADMIN);
-        String tokenUsername = jwtService.extractUsername(jwtToken.getToken());
-        if (!username.equals(tokenUsername)) {
-            throw new ForbiddenException("You are not allowed to update this admin");
-        }
-
         Admin oldAdmin = adminRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Admin not found"));
         Admin adminEntity = AdminConvertor.toEntity(admin);
         adminEntity.setUsername(username);
         if(admin.getPassword() == null){
             adminEntity.setPassword(oldAdmin.getPassword());
+        }else{
+            adminEntity.setPassword(passwordEncoder.encode(admin.getPassword()));
         }
-        adminEntity.setPassword(passwordEncoder.encode(admin.getPassword()));
         adminEntity.setCreatedAt(oldAdmin.getCreatedAt());
         adminEntity.setDeletedAt(oldAdmin.getDeletedAt());
         adminEntity.setRole(oldAdmin.getRole());
