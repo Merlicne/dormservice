@@ -103,3 +103,17 @@ public class JwtService {
         return allowIssuer.equals(tokenIssuer);
     }
 }
+
+// + extractUsername(String): String
+// + extractRole(String): Role
+// + extractClaim(String, Function<Claims, T>): <T>
+// + generateToken(UserDetails): String
+// + generateToken(Map<String, Object>, UserDetails): String
+// + getExpirationTime(): long
+// - buildToken(Map<String, Object>, UserDetails, long): String
+// + isTokenValid(String, UserDetails): boolean
+// + isTokenExpired(String): boolean
+// - extractExpiration(String): Date
+// + extractAllClaims(String): Claims
+// - getSignInKey(): Key
+// + isTokenIssuerValid(String): boolean
